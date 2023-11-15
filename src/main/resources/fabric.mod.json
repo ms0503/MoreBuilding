@@ -1,0 +1,30 @@
+{
+    "contact": {
+        "homepage": "https://ms0503.github.io/more-building",
+        "issues": "https://github.com/ms0503/more-building/issues",
+        "sources": "https://github.com/ms0503/more-building"
+    },
+    "contributors": [
+        "Sora Tonami"
+    ],
+    "depends": {
+        "fabric": ">=0.90.7",
+        "fabricloader": ">=0.14.24",
+        "minecraft": ">=1.20"
+    },
+    "description": "This mod adds more building blocks.",
+    "entrypoints": {
+        "main": [
+            "ms.sora.mod.morebuilding.MoreBuildingFabric"
+        ]
+    },
+    "icon": "assets/morebuilding/icon.png",
+    "id": "morebuilding",
+    "license": "MIT",
+    "mixins": [
+        "more-building.mixins.json"
+    ],
+    "name": "More Building",
+    "schemaVersion": 1,
+    "version": "${version}"
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "block/bricks",
+    "textures": {
+        "all": "morebuilding:block/big_bricks"
+    }
+}
