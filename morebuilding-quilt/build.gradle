@@ -1,0 +1,133 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'ms.sora.gradle.morebuilding'
+}
+
+architectury {
+    platformSetupLoomIde()
+    loader('quilt')
+}
+
+loom {
+    accessWidenerPath = project(':morebuilding-common').loom.accessWidenerPath
+}
+
+configurations {
+    common
+    shadowCommon
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentQuilt.extendsFrom common
+}
+
+repositories {
+}
+
+dependencies {
+    modImplementation "org.quiltmc:quilt-loader:${quilt_loader_version}"
+    modApi "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilt_api_version}"
+    modApi("dev.architectury:architectury-fabric:${architectury_version}") {
+        exclude group: 'net.fabricmc'
+        exclude group: 'net.fabricmc.fabric-api'
+    }
+    common(project(path: ':morebuilding-common', configuration: 'namedElements')) {
+        transitive false
+    }
+    shadowCommon(project(path: ':morebuilding-common', configuration: 'transformProductionFabric')) {
+        transitive false
+    }
+}
+
+processResources {
+    var replaceProperties = [
+        architectury_version_range: architectury_version_range_fabric,
+        maven_group               : maven_group,
+        minecraft_version_range   : minecraft_version_range_fabric,
+        mod_description           : mod_description,
+        mod_id                    : mod_id,
+        mod_license               : mod_license,
+        mod_name                  : mod_name,
+        mod_version               : version,
+        quilt_api_version_range   : quilt_api_version_range,
+        quilt_loader_version_range: quilt_loader_version_range,
+        repo_page_url             : repo_page_url
+    ]
+    inputs.properties replaceProperties
+    filesMatching('quilt.mod.json') {
+        expand replaceProperties + [project: project]
+    }
+}
+
+shadowJar {
+    exclude 'architectury.common.json'
+    configurations = [
+        project.configurations.shadowCommon
+    ]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    injectAccessWidener = true
+    inputFile.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+sourcesJar {
+    def commonSources = project(':morebuilding-common').sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map {
+        zipTree(it)
+    }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        MoreBuildingQuilt(MavenPublication) {
+            from components.java
+            groupId = maven_group
+            artifactId = "${archives_base_name}-quilt"
+            pom {
+                description = mod_description
+                developers {
+                    developer {
+                        email = 'ms0503@outlook.com'
+                        id = 'ms0503'
+                        name = 'Sora Tonami'
+                    }
+                }
+                licenses {
+                    license {
+                        distribution = 'repo'
+                        name = mod_license
+                        url = "${repo_page_url}/blob/HEAD/LICENSE.md"
+                    }
+                }
+                name = archives_base_name
+                resolveStrategy = 1
+                scm {
+                    connection = "scm:git:${repo_url}"
+                    developerConnection = "scm:git:${repo_url}"
+                    url = repo_page_url
+                }
+                url = repo_page_url
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                password = System.getenv('GITHUB_TOKEN')
+                username = 'ms0503'
+            }
+            name = 'GitHubPackages'
+            url = 'https://maven.pkg.github.com/ms0503/more-building'
+        }
+    }
+}

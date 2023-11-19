@@ -1,0 +1,6 @@
+{
+    "parent": "block/stone_bricks",
+    "textures": {
+        "all": "morebuilding:block/small_stone_bricks"
+    }
+}

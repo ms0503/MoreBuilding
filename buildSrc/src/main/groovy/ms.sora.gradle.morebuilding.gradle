@@ -1,0 +1,36 @@
+plugins {
+    id 'architectury-plugin'
+    id 'idea'
+    id 'java'
+    id 'maven-publish'
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = 'UTF-8'
+    it.options.release.set(17)
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    withJavadocJar()
+    withSourcesJar()
+}
+
+afterEvaluate {
+    base {
+        archivesName = archives_base_name
+    }
+
+    version = "${version}+${minecraft_version}"
+    group = maven_group
+}

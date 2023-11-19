@@ -1,0 +1,53 @@
+{
+    "mixin": [
+        "morebuilding.mixins.json",
+        "morebuilding-common.mixins.json"
+    ],
+    "quilt_loader": {
+        "depends": [
+            {
+                "id": "architectury",
+                "versions": "${architectury_version_range}"
+            },
+            {
+                "id": "minecraft",
+                "versions": "${minecraft_version_range}"
+            },
+            {
+                "id": "quilted_fabric_api",
+                "versions": "${quilt_api_version_range}"
+            },
+            {
+                "id": "quilt_loader",
+                "versions": "${quilt_loader_version_range}"
+            }
+        ],
+        "entrypoints": {
+            "init": [
+                "ms.sora.mod.morebuilding.MoreBuildingQuilt"
+            ]
+        },
+        "group": "${maven_group}",
+        "id": "${mod_id}",
+        "intermediate_mappings": "net.fabricmc:intermediary",
+        "metadata": {
+            "contact": {
+                "homepage": "https://ms0503.github.io/more-building",
+                "issues": "${repo_page_url}/issues",
+                "sources": "${repo_page_url}"
+            },
+            "contributors": {
+                "Sora Tonami": "Owner"
+            },
+            "description": "${mod_description}",
+            "icon": "assets/${mod_id}/icon.png",
+            "license": "${mod_license}",
+            "name": "${mod_name}"
+        },
+        "minecraft": {
+            "environment": "*"
+        },
+        "version": "${mod_version}"
+    },
+    "schema_version": 1
+}

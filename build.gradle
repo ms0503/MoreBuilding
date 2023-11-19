@@ -1,16 +1,14 @@
+import com.modrinth.minotaur.dependencies.DependencyType
+import com.modrinth.minotaur.dependencies.ModDependency
+
 plugins {
-    id 'idea'
-	id 'maven-publish'
-	alias libs.plugins.quilt.loom
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.modrinth.minotaur' version '2.+'
+    id 'dev.architectury.loom' version '1.3-SNAPSHOT' apply false
+    id 'idea'
+    id 'java'
+    id 'io.github.pacifistmc.forgix' version '1.+'
 }
-
-base {
-	archivesName = project.archives_base_name
-}
-
-version = "${project.version}+${libs.versions.minecraft.get()}"
-group = project.maven_group
 
 idea {
     module {
@@ -22,147 +20,85 @@ idea {
     }
 }
 
-repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
-}
-
-loom {
-	// Loom and Loader both use this block in order to gather more information about your mod.
-	mods {
-		// This should match your mod id.
-        morebuilding {
-			// Tell Loom about each source set used by your mod here. This ensures that your mod's classes are properly transformed by Loader.
-            sourceSet('main')
-			// If you shade (directly include classes, not JiJ) a dependency into your mod, include it here using one of these methods:
-            // dependency('com.example.shadowedmod:1.2.3')
-            // configuration('exampleShadedConfigurationName')
-		}
-	}
-}
-
-// All the dependencies are declared at gradle/libs.version.toml and referenced with "libs.<id>"
-// See https://docs.gradle.org/current/userguide/platforms.html for information on how version catalogs work.
-dependencies {
-	minecraft libs.minecraft
-    mappings variantOf(libs.quilt.mappings) {
-        classifier 'intermediary-v2'
-    }
-	// Replace the above line with the block below if you want to use Mojang mappings as your primary mappings, falling back on QM for parameters and Javadocs
-	/*
-	mappings loom.layered {
-		mappings "org.quiltmc:quilt-mappings:${libs.versions.quilt.mappings.get()}:intermediary-v2"
-		officialMojangMappings()
-	}
-	*/
-	modImplementation libs.quilt.loader
-
-	// QSL is not a complete API; You will need Quilted Fabric API to fill in the gaps.
-	// Quilted Fabric API will automatically pull in the correct QSL version.
-	modImplementation libs.quilted.fabric.api
-	// modImplementation libs.bundles.quilted.fabric.api // If you wish to use Fabric API's deprecated modules, you can replace the above line with this one
-}
-
-processResources {
-	inputs.property 'version', version
-
-	filesMatching('quilt.mod.json') {
-		expand 'version': version
-	}
-}
-
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = 'UTF-8'
+    it.options.release.set(17)
 }
 
-java {
-	// Still required by IDEs such as Eclipse and Visual Studio Code
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+forgix {
+    group = maven_group
+    mergedJarName = "${archives_base_name}-${version}.jar"
+    outputDir = 'build/libs/merged'
 
-	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task if it is present.
-	// If you remove this line, sources will not be generated.
-	withSourcesJar()
+    fabric {
+        jarLocation = "build/libs/${archives_base_name}-${version}.jar"
+        projectName = 'morebuilding-fabric'
+    }
 
-	// If this mod is going to be a library, then it should also generate Javadocs in order to aid with development.
-	// Uncomment this line to generate them.
-	// withJavadocJar()
-}
+    forge {
+        jarLocation = "build/libs/${archives_base_name}-${version}.jar"
+        projectName = 'morebuilding-forge'
+    }
 
-// If you plan to use a different file for the license, don't forget to change the file name here!
-jar {
-	from('LICENSE') {
-        rename {
-            "${it}_${base.archivesName.get()}"
-        }
-	}
-}
+    custom {
+        jarLocation = "build/libs/${archives_base_name}-${version}.jar"
+        projectName = 'morebuilding-neoforge'
+    }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
-// Configure the maven publication
-publishing {
-	publications {
-        MoreBuilding(MavenPublication) {
-            from components.java
-            afterEvaluate {
-                groupId = 'ms.sora.mod'
-                artifactId = 'morebuilding'
-            }
-            pom {
-                description = 'The mod that adds many building blocks.'
-                developers {
-                    developer {
-                        email = 'ms0503@outlook.com'
-                        id = 'ms0503'
-                        name = 'Sora Tonami'
-                    }
-                }
-                licenses {
-                    license {
-                        distribution = 'repo'
-                        name = 'MIT'
-                        url = 'https://github.com/ms0503/more-building/blob/HEAD/LICENSE.md'
-                    }
-                }
-                name = archives_base_name
-                resolveStrategy = 1
-                scm {
-                    connection = 'scm:git:https://github.com/ms0503/more-building.git'
-                    developerConnection = 'scm:git:https://github.com/ms0503/more-building.git'
-                    url = 'https://github.com/ms0503/more-building'
-                }
-                url = 'https://github.com/ms0503/more-building'
-            }
-		}
-	}
-
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
-        maven {
-            credentials {
-                password = System.getenv('GITHUB_TOKEN')
-                username = 'ms0503'
-            }
-            name = 'GitHubPackages'
-            url = 'https://maven.pkg.github.com/ms0503/more-building'
-        }
+    quilt {
+        jarLocation = "build/libs/${archives_base_name}-${version}.jar"
+        projectName = 'morebuilding-quilt'
     }
 }
 
+architectury {
+    minecraft = minecraft_version
+}
+
+subprojects {
+    apply plugin: 'dev.architectury.loom'
+
+    loom {
+        silentMojangMappingsLicense()
+    }
+
+    repositories {
+        maven {
+            name = 'Quilt'
+            url = 'https://maven.quiltmc.org/repository/release'
+        }
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${minecraft_version}"
+        mappings "org.quiltmc:quilt-mappings:1.20.1+build.23:intermediary-v2"
+    }
+}
+
+tasks.mergeJars.dependsOn tasks.build
+tasks.modrinth.dependsOn.addAll(tasks.clean, tasks.build, tasks.mergeJars)
+
 modrinth {
-    projectId = 'L2OB4eiS'
-    uploadFile = remapJar
-    gameVersions.add('1.20.1')
-    loaders.add('quilt')
+    changelog = '''
+        This mod requires [Architectury API](https://modrinth.com/mod/architectury-api) (in all) and [Fabric API](https://modrinth.com/mod/fabric-api) (in Fabric) or [Quilt Standard Library](https://modrinth.com/mod/qsl) (in QuiltMC).
+        Click [here](https://github.com/ms0503/more-building/commits/1.20.1) for changelog.
+
+        [Architectury API](https://modrinth.com/mod/architectury-api)(全ての場合)と[Fabric API](https://modrinth.com/mod/fabric-api)(Fabricの場合)または[Quilt Standard Library](https://modrinth.com/mod/qsl)(QuiltMCの場合)が前提MODとして必要です。
+        チェンジログは[こちら](https://github.com/ms0503/more-building/commits/1.20.1)から読むことが出来ます。
+    '''
+    debugMode = false
+    dependencies.addAll([
+        new ModDependency('P7dR8mSH', DependencyType.REQUIRED), // Fabric API
+        new ModDependency('qvIfYCYJ', DependencyType.REQUIRED), // QFAPI/QSL
+        new ModDependency('lhGA9TYQ', DependencyType.REQUIRED)  // Architectury API
+    ])
+    gameVersions.add(minecraft_version)
+    loaders.addAll('fabric', 'forge', 'neoforge', 'quilt')
+    projectId = modrinth_project_id
+    syncBodyFrom = rootProject.file('README.md').text
+    token = System.getenv('MODRINTH_TOKEN')
+    uploadFile = "${forgix.outputDir}/${forgix.mergedJarName}"
+    versionName = "v${version}"
+    versionNumber.set(version as String)
+    versionType = 'alpha'
 }

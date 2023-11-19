@@ -1,0 +1,74 @@
+plugins {
+    id 'ms.sora.gradle.morebuilding'
+}
+
+architectury {
+    common(enabled_platforms.split(','))
+}
+
+loom {
+    accessWidenerPath = file('src/main/resources/morebuilding.accesswidener')
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modApi "dev.architectury:architectury:${architectury_version}"
+}
+
+tasks.register('expandInfo', Copy) {
+    doFirst {
+        delete 'src/main/java/ms/sora/mod/morebuilding/common/MoreBuildingInfo.java'
+    }
+    from 'MoreBuildingInfo.java'
+    into 'src/main/java/ms/sora/mod/morebuilding/common'
+    expand mod_id: mod_id, mod_name: mod_name, mod_version: version
+}
+
+compileJava.dependsOn(expandInfo)
+sourcesJar.dependsOn(expandInfo)
+
+publishing {
+    publications {
+        MoreBuildingCommon(MavenPublication) {
+            from components.java
+            groupId = maven_group
+            artifactId = archives_base_name
+            pom {
+                description = mod_description
+                developers {
+                    developer {
+                        email = 'ms0503@outlook.com'
+                        id = 'ms0503'
+                        name = 'Sora Tonami'
+                    }
+                }
+                licenses {
+                    license {
+                        distribution = 'repo'
+                        name = mod_license
+                        url = "${repo_page_url}/blob/HEAD/LICENSE.md"
+                    }
+                }
+                name = archives_base_name
+                resolveStrategy = 1
+                scm {
+                    connection = "scm:git:${repo_url}"
+                    developerConnection = "scm:git:${repo_url}"
+                    url = repo_page_url
+                }
+                url = repo_page_url
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            credentials {
+                password = System.getenv('GITHUB_TOKEN')
+                username = 'ms0503'
+            }
+            name = 'GitHubPackages'
+            url = 'https://maven.pkg.github.com/ms0503/more-building'
+        }
+    }
+}

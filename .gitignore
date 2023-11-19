@@ -34,3 +34,6 @@ workspace/
 *.DS_Store
 
 .env
+.metadata/
+output/
+libs/

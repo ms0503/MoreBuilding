@@ -1,0 +1,35 @@
+{
+    "authors": [
+        "Sora Tonami"
+    ],
+    "contact": {
+        "homepage": "https://ms0503.github.io/more-building",
+        "issues": "${repo_page_url}/issues",
+        "sources": "${repo_page_url}"
+    },
+    "contributors": [
+        "Sora Tonami"
+    ],
+    "depends": {
+        "architectury": "${architectury_version_range}",
+        "fabric": "${fabric_api_version_range}",
+        "fabricloader": "${fabric_loader_version_range}",
+        "minecraft": "${minecraft_version_range}"
+    },
+    "description": "${mod_description}",
+    "entrypoints": {
+        "main": [
+            "ms.sora.mod.morebuilding.MoreBuildingFabric"
+        ]
+    },
+    "environment": "*",
+    "icon": "assets/${mod_id}/icon.png",
+    "id": "${mod_id}",
+    "license": "${mod_license}",
+    "mixins": [
+        "morebuilding.mixins.json"
+    ],
+    "name": "${mod_name}",
+    "schemaVersion": 1,
+    "version": "${mod_version}"
+}
