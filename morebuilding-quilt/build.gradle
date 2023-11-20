@@ -3,6 +3,10 @@ plugins {
     id 'ms.sora.gradle.morebuilding'
 }
 
+base {
+    archivesName = "${archivesName}-quilt"
+}
+
 architectury {
     platformSetupLoomIde()
     loader('quilt')
@@ -30,6 +34,9 @@ dependencies {
         exclude group: 'net.fabricmc'
         exclude group: 'net.fabricmc.fabric-api'
     }
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
+        exclude group: 'net.fabricmc.fabric-api'
+    }
     common(project(path: ':morebuilding-common', configuration: 'namedElements')) {
         transitive false
     }
@@ -41,6 +48,7 @@ dependencies {
 processResources {
     var replaceProperties = [
         architectury_version_range: architectury_version_range_fabric,
+        cloth_config_version_range: cloth_config_version_range_fabric,
         maven_group               : maven_group,
         minecraft_version_range   : minecraft_version_range_fabric,
         mod_description           : mod_description,
@@ -88,21 +96,21 @@ components.java {
 
 publishing {
     publications {
-        MoreBuildingQuilt(MavenPublication) {
+        register('MoreBuildingQuilt', MavenPublication) {
             from components.java
             groupId = maven_group
             artifactId = "${archives_base_name}-quilt"
             pom {
                 description = mod_description
                 developers {
-                    developer {
+                    it.developer {
                         email = 'ms0503@outlook.com'
                         id = 'ms0503'
                         name = 'Sora Tonami'
                     }
                 }
                 licenses {
-                    license {
+                    it.license {
                         distribution = 'repo'
                         name = mod_license
                         url = "${repo_page_url}/blob/HEAD/LICENSE.md"

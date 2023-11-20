@@ -1,6 +1,6 @@
 {
     "mixin": [
-        "morebuilding.mixins.json",
+        "morebuilding-quilt.mixins.json",
         "morebuilding-common.mixins.json"
     ],
     "quilt_loader": {

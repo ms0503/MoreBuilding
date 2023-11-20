@@ -1,4 +1,7 @@
 {
     "block.morebuilding.big_bricks": "Big Bricks",
-    "block.morebuilding.small_stone_bricks": "Small Stone Bricks"
+    "block.morebuilding.sand_bricks": "Sand Bricks",
+    "block.morebuilding.small_sand_bricks": "Small Sand Bricks",
+    "block.morebuilding.small_stone_bricks": "Small Stone Bricks",
+    "itemGroup.morebuilding.tab": "More Building"
 }

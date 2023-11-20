@@ -33,6 +33,7 @@ workspace/
 # macOS
 *.DS_Store
 
+.architectury-transformer/
 .env
 .metadata/
 output/

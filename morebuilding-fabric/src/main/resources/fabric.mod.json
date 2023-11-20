@@ -12,6 +12,7 @@
     ],
     "depends": {
         "architectury": "${architectury_version_range}",
+        "cloth-config": "${cloth_config_version_range}",
         "fabric": "${fabric_api_version_range}",
         "fabricloader": "${fabric_loader_version_range}",
         "minecraft": "${minecraft_version_range}"
@@ -27,7 +28,8 @@
     "id": "${mod_id}",
     "license": "${mod_license}",
     "mixins": [
-        "morebuilding.mixins.json"
+        "morebuilding-fabric.mixins.json",
+        "morebuilding-common.mixins.json"
     ],
     "name": "${mod_name}",
     "schemaVersion": 1,

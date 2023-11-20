@@ -1,5 +1,15 @@
 import com.modrinth.minotaur.dependencies.DependencyType
 import com.modrinth.minotaur.dependencies.ModDependency
+import com.modrinth.minotaur.dependencies.VersionDependency
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.netflix.nebula:gradle-aggregate-javadocs-plugin:3.0.1'
+    }
+}
 
 plugins {
     id 'architectury-plugin' version '3.4-SNAPSHOT'
@@ -7,8 +17,16 @@ plugins {
     id 'dev.architectury.loom' version '1.3-SNAPSHOT' apply false
     id 'idea'
     id 'java'
-    id 'io.github.pacifistmc.forgix' version '1.+'
 }
+
+apply plugin: 'nebula-aggregate-javadocs'
+
+base {
+    archivesName = archives_base_name
+}
+
+version = "${version}+${minecraft_version}"
+group = maven_group
 
 idea {
     module {
@@ -22,33 +40,7 @@ idea {
 
 tasks.withType(JavaCompile).configureEach {
 	it.options.encoding = 'UTF-8'
-    it.options.release.set(17)
-}
-
-forgix {
-    group = maven_group
-    mergedJarName = "${archives_base_name}-${version}.jar"
-    outputDir = 'build/libs/merged'
-
-    fabric {
-        jarLocation = "build/libs/${archives_base_name}-${version}.jar"
-        projectName = 'morebuilding-fabric'
-    }
-
-    forge {
-        jarLocation = "build/libs/${archives_base_name}-${version}.jar"
-        projectName = 'morebuilding-forge'
-    }
-
-    custom {
-        jarLocation = "build/libs/${archives_base_name}-${version}.jar"
-        projectName = 'morebuilding-neoforge'
-    }
-
-    quilt {
-        jarLocation = "build/libs/${archives_base_name}-${version}.jar"
-        projectName = 'morebuilding-quilt'
-    }
+    it.options.release.set 17
 }
 
 architectury {
@@ -67,6 +59,10 @@ subprojects {
             name = 'Quilt'
             url = 'https://maven.quiltmc.org/repository/release'
         }
+        maven {
+            name = 'shedaniel'
+            url = 'https://maven.shedaniel.me'
+        }
     }
 
     dependencies {
@@ -75,30 +71,98 @@ subprojects {
     }
 }
 
-tasks.mergeJars.dependsOn tasks.build
-tasks.modrinth.dependsOn.addAll(tasks.clean, tasks.build, tasks.mergeJars)
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+jar {
+    def commonJar = project(':morebuilding-common').remapJar
+    def fabricJar = project(':morebuilding-fabric').remapJar
+    def forgeJar = project(':morebuilding-forge').remapJar
+    def neoForgeJar = project(':morebuilding-neoforge').remapJar
+    def quiltJar = project(':morebuilding-quilt').remapJar
+    dependsOn commonJar, fabricJar, forgeJar, neoForgeJar, quiltJar
+    from commonJar.archiveFile.map {
+        zipTree(it)
+    }
+    from fabricJar.archiveFile.map {
+        zipTree(it)
+    }
+    from forgeJar.archiveFile.map {
+        zipTree(it)
+    }
+    from neoForgeJar.archiveFile.map {
+        zipTree(it)
+    }
+    from quiltJar.archiveFile.map {
+        zipTree(it)
+    }
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes([
+            'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            'Implementation-Title'    : project.name,
+            'Implementation-Vendor'   : 'Sora Tonami',
+            'Implementation-Version'  : project.jar.archiveVersion,
+            'Specification-Title'     : mod_id,
+            'Specification-Vendor'    : 'Sora Tonami',
+            'Specification-Version'   : '1'
+        ])
+    }
+}
+
+tasks.named('sourcesJar', Jar) {
+    archiveClassifier = 'sources'
+    def commonSources = project(':morebuilding-common').sourcesJar
+    def fabricSources = project(':morebuilding-fabric').sourcesJar
+    def forgeSources = project(':morebuilding-forge').sourcesJar
+    def neoForgeSources = project(':morebuilding-neoforge').sourcesJar
+    def quiltSources = project(':morebuilding-quilt').sourcesJar
+    dependsOn commonSources, fabricSources, forgeSources, neoForgeSources, quiltSources
+    from commonSources.archiveFile.map {
+        zipTree(it)
+    }
+    from fabricSources.archiveFile.map {
+        zipTree(it)
+    }
+    from forgeSources.archiveFile.map {
+        zipTree(it)
+    }
+    from neoForgeSources.archiveFile.map {
+        zipTree(it)
+    }
+    from quiltSources.archiveFile.map {
+        zipTree(it)
+    }
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE
+}
+
+tasks.named('javadocJar', Jar) {
+    dependsOn tasks.aggregateJavadocs
+}
+
+tasks.modrinth.dependsOn.addAll tasks.clean, tasks.build
 
 modrinth {
-    changelog = '''
-        This mod requires [Architectury API](https://modrinth.com/mod/architectury-api) (in all) and [Fabric API](https://modrinth.com/mod/fabric-api) (in Fabric) or [Quilt Standard Library](https://modrinth.com/mod/qsl) (in QuiltMC).
-        Click [here](https://github.com/ms0503/more-building/commits/1.20.1) for changelog.
-
-        [Architectury API](https://modrinth.com/mod/architectury-api)(全ての場合)と[Fabric API](https://modrinth.com/mod/fabric-api)(Fabricの場合)または[Quilt Standard Library](https://modrinth.com/mod/qsl)(QuiltMCの場合)が前提MODとして必要です。
-        チェンジログは[こちら](https://github.com/ms0503/more-building/commits/1.20.1)から読むことが出来ます。
-    '''
+    changelog = project.file('CHANGELOG.md').text
     debugMode = false
     dependencies.addAll([
-        new ModDependency('P7dR8mSH', DependencyType.REQUIRED), // Fabric API
-        new ModDependency('qvIfYCYJ', DependencyType.REQUIRED), // QFAPI/QSL
-        new ModDependency('lhGA9TYQ', DependencyType.REQUIRED)  // Architectury API
+        new ModDependency('P7dR8mSH', DependencyType.REQUIRED),                 // Fabric API
+        new ModDependency('qvIfYCYJ', DependencyType.REQUIRED),                 // QFAPI/QSL
+        new VersionDependency('lhGA9TYQ', 'Sbew3kXe', DependencyType.REQUIRED), // Architectury API (Fabric)
+        new VersionDependency('lhGA9TYQ', 'gyJ7kDpb', DependencyType.REQUIRED), // Architectury API (Forge)
+        new VersionDependency('9s6osm5g', 's7VTKfLA', DependencyType.REQUIRED), // Cloth Config API (Fabric)
+        new VersionDependency('9s6osm5g', 'JoLgnJ0G', DependencyType.REQUIRED)  // Cloth Config API (Forge)
     ])
-    gameVersions.add(minecraft_version)
-    loaders.addAll('fabric', 'forge', 'neoforge', 'quilt')
+    gameVersions.add minecraft_version
+    loaders.addAll 'fabric', 'forge', 'neoforge', 'quilt'
     projectId = modrinth_project_id
-    syncBodyFrom = rootProject.file('README.md').text
-    token = System.getenv('MODRINTH_TOKEN')
-    uploadFile = "${forgix.outputDir}/${forgix.mergedJarName}"
+    syncBodyFrom = project.file('README.md').text
+    token = System.getenv 'MODRINTH_TOKEN'
+    uploadFile = jar
     versionName = "v${version}"
-    versionNumber.set(version as String)
+    versionNumber.set version as String
     versionType = 'alpha'
 }

@@ -2,6 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-00cc00.svg)](https://opensource.org/licenses/MIT)
 [![Modrinth Downloads](https://img.shields.io/modrinth/dt/L2OB4eiS?label=Modrinth+downloads&logo=modrinth)](https://modrinth.com/mod/more-building)
+![Loaders and versions](https://img.shields.io/badge/Fabric_%2F_Forge_%2F_NeoForge_%2F_Quilt-_1.20.1-blue)
 
 More Building adds more building blocks to Minecraft 1.20.1.
 
@@ -12,16 +13,20 @@ More Buildingは1.20.1環境に建材を追加するMODです。
 This mod runs
 on [Fabric](https://fabricmc.net), [Forge](https://files.minecraftforge.net), [NeoForge](https://neoforged.net)
 and [QuiltMC](https://quiltmc.org).  
-It requires [Architectury API](https://modrinth.com/mod/architectury-api)(in all)
-and [Fabric API](https://modrinth.com/mod/fabric-api) (in Fabric)
-or [Quilt Standard Library](https://modrinth.com/mod/qsl) (in QuiltMC).
+It
+requires [Architectury API](https://modrinth.com/mod/architectury-api), [Cloth Config API](https://modrinth.com/mod/cloth-config) (
+in all)
+and [Fabric API](https://modrinth.com/mod/fabric-api) (on Fabric)
+or [Quilt Standard Library](https://modrinth.com/mod/qsl) (on QuiltMC).
 
-More Buildingは[Fabric](https://fabricmc.net)
-や[Forge](https://files.minecraftforge.net)、[NeoForge](https://neoforged.net)、[QuiltMC](https://quiltmc.org)
+More Buildingは [Fabric](https://fabricmc.net) や
+[Forge](https://files.minecraftforge.net) 、[NeoForge](https://neoforged.net) 、[QuiltMC](https://quiltmc.org)
 などで動作します。  
-[Architectury API](https://modrinth.com/mod/architectury-api)(全ての場合)
-と[Fabric API](https://modrinth.com/mod/fabric-api)(Fabricの場合)
-または[Quilt Standard Library](https://modrinth.com/mod/qsl)(QuiltMCの場合)が前提MODとして必要です。
+[Architectury API](https://modrinth.com/mod/architectury-api)
+や [Cloth Config API](https://modrinth.com/mod/cloth-config) (全ての場合) に加えて
+[Fabric API](https://modrinth.com/mod/fabric-api) (Fabricの場合)
+または [Quilt Standard Library](https://modrinth.com/mod/qsl) (QuiltMCの場合)
+が前提MODとして必要です。
 
 ## License
 

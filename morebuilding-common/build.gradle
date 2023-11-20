@@ -2,6 +2,10 @@ plugins {
     id 'ms.sora.gradle.morebuilding'
 }
 
+base {
+    archivesName = "${archivesName}-common"
+}
+
 architectury {
     common(enabled_platforms.split(','))
 }
@@ -29,21 +33,21 @@ sourcesJar.dependsOn(expandInfo)
 
 publishing {
     publications {
-        MoreBuildingCommon(MavenPublication) {
+        register('MoreBuildingCommon', MavenPublication) {
             from components.java
             groupId = maven_group
             artifactId = archives_base_name
             pom {
                 description = mod_description
                 developers {
-                    developer {
+                    it.developer {
                         email = 'ms0503@outlook.com'
                         id = 'ms0503'
                         name = 'Sora Tonami'
                     }
                 }
                 licenses {
-                    license {
+                    it.license {
                         distribution = 'repo'
                         name = mod_license
                         url = "${repo_page_url}/blob/HEAD/LICENSE.md"

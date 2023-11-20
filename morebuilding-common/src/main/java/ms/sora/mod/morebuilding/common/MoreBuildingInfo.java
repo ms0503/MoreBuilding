@@ -17,5 +17,5 @@ public class MoreBuildingInfo {
     /**
      * Version
      */
-    public static final String MOD_VERSION = "0.1.0-alpha1";
+    public static final String MOD_VERSION = "0.1.0-alpha2";
 }

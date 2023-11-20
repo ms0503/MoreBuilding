@@ -3,6 +3,10 @@ plugins {
     id 'ms.sora.gradle.morebuilding'
 }
 
+base {
+    archivesName = "${archivesName}-fabric"
+}
+
 architectury {
     platformSetupLoomIde()
     fabric()
@@ -27,6 +31,9 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
     modApi "dev.architectury:architectury-fabric:${architectury_version}"
+    modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
+        exclude group: 'net.fabricmc.fabric-api'
+    }
     common(project(path: ':morebuilding-common', configuration: 'namedElements')) {
         transitive false
     }
@@ -38,6 +45,7 @@ dependencies {
 processResources {
     var replaceProperties = [
         architectury_version_range : architectury_version_range_fabric,
+        cloth_config_version_range: cloth_config_version_range_fabric,
         fabric_api_version_range   : fabric_api_version_range,
         fabric_loader_version_range: fabric_loader_version_range,
         minecraft_version_range    : minecraft_version_range_fabric,
@@ -84,21 +92,21 @@ components.java {
 
 publishing {
     publications {
-        MoreBuildingFabric(MavenPublication) {
+        register('MoreBuildingFabric', MavenPublication) {
             from components.java
             groupId = maven_group
             artifactId = "${archives_base_name}-fabric"
             pom {
                 description = mod_description
                 developers {
-                    developer {
+                    it.developer {
                         email = 'ms0503@outlook.com'
                         id = 'ms0503'
                         name = 'Sora Tonami'
                     }
                 }
                 licenses {
-                    license {
+                    it.license {
                         distribution = 'repo'
                         name = mod_license
                         url = "${repo_page_url}/blob/HEAD/LICENSE.md"

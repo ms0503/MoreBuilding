@@ -3,6 +3,10 @@ plugins {
     id 'ms.sora.gradle.morebuilding'
 }
 
+base {
+    archivesName = "${archivesName}-neoforge"
+}
+
 architectury {
     platformSetupLoomIde()
     loader('neoforge')
@@ -37,6 +41,7 @@ repositories {
 dependencies {
     forge "net.neoforged:forge:${minecraft_version}-${neoforge_version}"
     modApi "dev.architectury:architectury-forge:${architectury_version}"
+    modApi "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
     common(project(path: ':morebuilding-common', configuration: 'namedElements')) {
         transitive false
     }
@@ -48,6 +53,7 @@ dependencies {
 processResources {
     var replaceProperties = [
         architectury_version_range   : architectury_version_range_forge,
+        cloth_config_version_range: cloth_config_version_range_forge,
         minecraft_version            : minecraft_version,
         minecraft_version_range      : minecraft_version_range_forge,
         mod_description              : mod_description,
@@ -100,21 +106,21 @@ components.java {
 
 publishing {
     publications {
-        MoreBuildingNeoForge(MavenPublication) {
+        register('MoreBuildingNeoForge', MavenPublication) {
             from components.java
             groupId = maven_group
             artifactId = "${archives_base_name}-neoforge"
             pom {
                 description = mod_description
                 developers {
-                    developer {
+                    it.developer {
                         email = 'ms0503@outlook.com'
                         id = 'ms0503'
                         name = 'Sora Tonami'
                     }
                 }
                 licenses {
-                    license {
+                    it.license {
                         distribution = 'repo'
                         name = mod_license
                         url = "${repo_page_url}/blob/HEAD/LICENSE.md"

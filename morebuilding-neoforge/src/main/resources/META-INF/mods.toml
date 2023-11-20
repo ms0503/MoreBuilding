@@ -12,21 +12,28 @@ modId = "${mod_id}"
 updateJSONURL = "${update_json_url}"
 version = "${mod_version}"
 
-[[dependencies."${mod_id}"]]
+[[dependencies.${ mod_id }]]
 mandatory = true
 modId = "architectury"
 ordering = "AFTER"
 side = "BOTH"
 versionRange = "${architectury_version_range}"
 
-[[dependencies."${mod_id}"]]
+[[dependencies.${ mod_id }]]
+mandatory = true
+modId = "cloth_config"
+ordering = "AFTER"
+side = "CLIENT"
+versionRange = "${cloth_config_version_range}"
+
+[[dependencies.${ mod_id }]]
 mandatory = true
 modId = "forge"
 ordering = "AFTER"
 side = "BOTH"
 versionRange = "${neoforge_version_range}"
 
-[[dependencies."${mod_id}"]]
+[[dependencies.${ mod_id }]]
 mandatory = true
 modId = "minecraft"
 ordering = "AFTER"
