@@ -32,6 +32,26 @@ public class MBBlocks {
     public static final RegistrySupplier<Block> BIG_BRICKS = register("big_bricks", Blocks.BRICKS);
 
     /**
+     * Diamond Bricks
+     */
+    public static final RegistrySupplier<Block> DIAMOND_BRICKS = register("diamond_bricks", Blocks.DIAMOND_BLOCK);
+
+    /**
+     * Emerald Bricks
+     */
+    public static final RegistrySupplier<Block> EMERALD_BRICKS = register("emerald_bricks", Blocks.EMERALD_BLOCK);
+
+    /**
+     * Gold Bricks
+     */
+    public static final RegistrySupplier<Block> GOLD_BRICKS = register("gold_bricks", Blocks.GOLD_BLOCK);
+
+    /**
+     * Iron Bricks
+     */
+    public static final RegistrySupplier<Block> IRON_BRICKS = register("iron_bricks", Blocks.IRON_BLOCK);
+
+    /**
      * Sand Bricks
      */
     public static final RegistrySupplier<Block> SAND_BRICKS = register("sand_bricks", Blocks.SANDSTONE);

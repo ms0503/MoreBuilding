@@ -1,0 +1,17 @@
+{
+    "category": "building",
+    "key": {
+        "I": {
+            "item": "minecraft:iron_block"
+        }
+    },
+    "pattern": [
+        "II",
+        "II"
+    ],
+    "result": {
+        "count": 4,
+        "item": "morebuilding:iron_bricks"
+    },
+    "type": "minecraft:crafting_shaped"
+}

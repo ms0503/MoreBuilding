@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-00cc00.svg)](https://opensource.org/licenses/MIT)
 [![Modrinth Downloads](https://img.shields.io/modrinth/dt/L2OB4eiS?label=Modrinth+downloads&logo=modrinth)](https://modrinth.com/mod/more-building)
-![Loaders and versions](https://img.shields.io/badge/Fabric_%2F_Forge_%2F_NeoForge_%2F_Quilt-_1.20.1-blue)
+![Loaders and Versions](https://img.shields.io/badge/Fabric_%2F_Forge_%2F_NeoForge_%2F_Quilt-_1.20.1-blue)
 
 More Building adds more building blocks to Minecraft 1.20.1.
 
@@ -19,7 +19,7 @@ in all)
 and [Fabric API](https://modrinth.com/mod/fabric-api) (on Fabric)
 or [Quilt Standard Library](https://modrinth.com/mod/qsl) (on QuiltMC).
 
-More Buildingは [Fabric](https://fabricmc.net) や
+このMODは [Fabric](https://fabricmc.net) や
 [Forge](https://files.minecraftforge.net) 、[NeoForge](https://neoforged.net) 、[QuiltMC](https://quiltmc.org)
 などで動作します。  
 [Architectury API](https://modrinth.com/mod/architectury-api)

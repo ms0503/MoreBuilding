@@ -1,5 +1,9 @@
 {
     "block.morebuilding.big_bricks": "大きいレンガ",
+    "block.morebuilding.diamond_bricks": "ダイヤモンドレンガ",
+    "block.morebuilding.emerald_bricks": "エメラルドレンガ",
+    "block.morebuilding.gold_bricks": "金レンガ",
+    "block.morebuilding.iron_bricks": "鉄レンガ",
     "block.morebuilding.sand_bricks": "砂レンガ",
     "block.morebuilding.small_sand_bricks": "小さい砂レンガ",
     "block.morebuilding.small_stone_bricks": "小さい石レンガ",

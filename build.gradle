@@ -28,6 +28,21 @@ base {
 version = "${version}+${minecraft_version}"
 group = maven_group
 
+println('##############################')
+println('# More Building Version Info #')
+println('##############################')
+println("More Building     : ${version}")
+println("Minecraft         : ${minecraft_version}")
+println("Fabric Loader     : ${fabric_loader_version}")
+println("Fabric API        : ${fabric_api_version}")
+println("MinecraftForge    : ${forge_version}")
+println("NeoForge          : ${neoforge_version}")
+println("Quilt Loader      : ${quilt_loader_version}")
+println("Quilted Fabric API: ${quilt_api_version}")
+println("Architectury      : ${architectury_version}")
+println("Cloth Config API  : ${cloth_config_version}")
+println('##############################')
+
 idea {
     module {
         downloadJavadoc = true

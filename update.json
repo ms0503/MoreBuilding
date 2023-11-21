@@ -2,11 +2,12 @@
     "1.20.1": {
         "0.1.0-alpha0+1.20.1": "Add Big Bricks",
         "0.1.0-alpha1+1.20.1": "Add Small Stone Bricks",
-        "0.1.0-beta0+1.20.1": "Add Sand Bricks and Small Sand Bricks"
+        "0.1.0-beta0+1.20.1": "Add Sand Bricks and Small Sand Bricks",
+        "0.1.0-beta1+1.20.1": "Add Gem Bricks and Metal Bricks"
     },
     "homepage": "https://ms0503.github.io/more-building",
     "promos": {
-        "1.20.1-latest": "0.1.0-beta0+1.20.1",
-        "1.20.1-recommended": "0.1.0-beta0+1.20.1"
+        "1.20.1-latest": "0.1.0-beta1+1.20.1",
+        "1.20.1-recommended": "0.1.0-beta1+1.20.1"
     }
 }

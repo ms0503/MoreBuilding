@@ -1,0 +1,17 @@
+{
+    "category": "building",
+    "key": {
+        "E": {
+            "item": "minecraft:emerald_block"
+        }
+    },
+    "pattern": [
+        "EE",
+        "EE"
+    ],
+    "result": {
+        "count": 4,
+        "item": "morebuilding:emerald_bricks"
+    },
+    "type": "minecraft:crafting_shaped"
+}

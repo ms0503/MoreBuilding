@@ -1,0 +1,17 @@
+{
+    "category": "building",
+    "key": {
+        "D": {
+            "item": "minecraft:diamond_block"
+        }
+    },
+    "pattern": [
+        "DD",
+        "DD"
+    ],
+    "result": {
+        "count": 4,
+        "item": "morebuilding:diamond_bricks"
+    },
+    "type": "minecraft:crafting_shaped"
+}

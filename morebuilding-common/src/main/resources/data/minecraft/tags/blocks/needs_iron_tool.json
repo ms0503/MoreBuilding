@@ -1,0 +1,8 @@
+{
+    "replace": false,
+    "values": [
+        "morebuilding:diamond_bricks",
+        "morebuilding:emerald_bricks",
+        "morebuilding:gold_bricks"
+    ]
+}
