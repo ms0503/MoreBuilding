@@ -2,6 +2,8 @@ package ms.sora.mod.morebuilding.common;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+
+import java.lang.reflect.InvocationTargetException;
 import java.util.function.Supplier;
 import ms.sora.mod.morebuilding.MoreBuildingCore;
 import net.minecraft.block.AbstractBlock;
@@ -14,7 +16,7 @@ import net.minecraft.registry.RegistryKeys;
 /**
  * More Building Blocks
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"UnstableApiUsage", "unchecked", "unused"})
 public class MBBlocks {
     /**
      * Block registry
@@ -66,21 +68,31 @@ public class MBBlocks {
      */
     public static final RegistrySupplier<Block> SMALL_STONE_BRICKS = register("small_stone_bricks", Blocks.STONE_BRICKS);
 
-    private static RegistrySupplier<Block> register(String name, Supplier<? extends Block> sup, Item.Settings settings) {
+    private static <T extends Block> RegistrySupplier<Block> register(String name, Supplier<T> sup, Item.Settings settings) {
         RegistrySupplier<Block> block = BLOCKS.register(name, sup);
         BLOCK_ITEMS.register(name, () -> new BlockItem(block.get(), settings.arch$tab(MoreBuildingCore.MORE_BUILDING_TAB)));
         return block;
     }
 
-    private static RegistrySupplier<Block> register(String name, Supplier<? extends Block> sup) {
+    private static <T extends Block> RegistrySupplier<Block> register(String name, Supplier<T> sup) {
         return register(name, sup, new Item.Settings());
     }
 
-    private static RegistrySupplier<Block> register(String name, AbstractBlock.Settings settings) {
-        return register(name, () -> new Block(settings));
+    private static <T extends Block> RegistrySupplier<Block> register(String name, AbstractBlock.Settings settings) {
+        return register(name, () -> {
+            try {
+                return ((Class<T>) Block.class).getDeclaredConstructor(AbstractBlock.Settings.class).newInstance(settings);
+            } catch(InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private static RegistrySupplier<Block> register(String name, Block block) {
         return register(name, AbstractBlock.Settings.copy(block));
+    }
+
+    private static <T extends Block> RegistrySupplier<Block> register(String name) {
+        return register(name, AbstractBlock.Settings.create());
     }
 }
