@@ -1,4 +1,5 @@
 {
+    "access_widener": "morebuilding.accesswidener",
     "mixin": [
         "morebuilding-quilt.mixins.json",
         "morebuilding-common.mixins.json"
@@ -23,15 +24,14 @@
             }
         ],
         "entrypoints": {
-            "init": [
-                "ms.sora.mod.morebuilding.MoreBuildingQuilt"
-            ]
+            "init": "ms.sora.mod.morebuilding.MoreBuildingQuilt"
         },
         "group": "${maven_group}",
         "id": "${mod_id}",
         "intermediate_mappings": "net.fabricmc:intermediary",
         "metadata": {
             "contact": {
+                "email": "ms0503@outlook.com",
                 "homepage": "https://ms0503.github.io/more-building",
                 "issues": "${repo_page_url}/issues",
                 "sources": "${repo_page_url}"
