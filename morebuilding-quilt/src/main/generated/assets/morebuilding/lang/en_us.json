@@ -1,0 +1,17 @@
+{
+    "advancements.morebuilding.backpack.description": "Got a Backpack",
+    "advancements.morebuilding.backpack.title": "Let's Go!",
+    "block.morebuilding.backpack": "Backpack",
+    "block.morebuilding.coarse_bricks": "Coarse Bricks",
+    "block.morebuilding.diamond_bricks": "Diamond Bricks",
+    "block.morebuilding.emerald_bricks": "Emerald Bricks",
+    "block.morebuilding.fine_sand_bricks": "Fine Sand Bricks",
+    "block.morebuilding.fine_stone_bricks": "Fine Stone Bricks",
+    "block.morebuilding.gold_bricks": "Gold Bricks",
+    "block.morebuilding.iron_bricks": "Iron Bricks",
+    "block.morebuilding.sand_bricks": "Sand Bricks",
+    "container.morebuilding.backpack": "Backpack",
+    "container.morebuilding.backpack.more": "と%s個のアイテム",
+    "itemGroup.morebuilding.tab": "More Building",
+    "modmenu.descriptionTranslation.morebuilding": "This mod adds more building blocks."
+}

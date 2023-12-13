@@ -11,17 +11,35 @@
     "contributors": [
         "Sora Tonami"
     ],
+    "custom": {
+        "modmenu": {
+            "links": {
+                "modmenu.kofi": "https://ko-fi.com/ms0503",
+                "modmenu.modrinth": "https://modrinth.com/mod/more-building",
+                "modmenu.paypal": "https://paypal.me/sotomirana",
+                "modmenu.twitch": "https://twitch.tv/ms0503_",
+                "modmenu.twitter": "https://twitter.com/ms0503_"
+            }
+        }
+    },
     "depends": {
         "architectury": "${architectury_version_range}",
         "cloth-config": "${cloth_config_version_range}",
-        "fabric": "${fabric_api_version_range}",
+        "fabric-api": "${fabric_api_version_range}",
         "fabricloader": "${fabric_loader_version_range}",
+        "java": "${java_version_range}",
         "minecraft": "${minecraft_version_range}"
     },
     "description": "${mod_description}",
     "entrypoints": {
+        "client": [
+            "ms.sora.mod.morebuilding.fabric.MBFabric${'$Client'}"
+        ],
         "main": [
-            "ms.sora.mod.morebuilding.MoreBuildingFabric"
+            "ms.sora.mod.morebuilding.fabric.MBFabric"
+        ],
+        "modmenu": [
+            "ms.sora.mod.morebuilding.fabric.MBModMenuEntry"
         ]
     },
     "environment": "*",

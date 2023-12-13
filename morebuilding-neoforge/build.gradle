@@ -3,13 +3,14 @@ plugins {
     id 'ms.sora.gradle.morebuilding'
 }
 
-base {
-    archivesName = "${archivesName}-neoforge"
-}
+version = "${version}+${libs.minecraft.get().version}"
+group = maven_group
 
 architectury {
     platformSetupLoomIde()
-    loader('neoforge')
+    neoForge {
+        platformPackage = 'neoforge'
+    }
 }
 
 loom {
@@ -19,7 +20,24 @@ loom {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
         mixinConfig 'morebuilding-common.mixins.json'
-        mixinConfig 'morebuilding.mixins.json'
+        mixinConfig 'morebuilding-neoforge.mixins.json'
+    }
+
+    mods {
+        register("$mod_id") {
+            sourceSet sourceSets.main as SourceSet
+        }
+    }
+
+    runs {
+        data {
+            data()
+            programArg '--all'
+            programArgs '--mod', "$mod_id"
+            programArgs '--existing', project(':morebuilding-common').file('src/main/resources').absolutePath
+            programArgs '--output', file('src/main/generated').absolutePath
+            runDir 'build/datagen'
+        }
     }
 }
 
@@ -36,16 +54,20 @@ repositories {
         name = 'NeoForged'
         url = 'https://maven.neoforged.net/releases'
     }
+    maven {
+        name = 'Su5eD'
+        url = 'https://maven.su5ed.dev/releases'
+    }
 }
 
 dependencies {
-    forge "net.neoforged:forge:${minecraft_version}-${neoforge_version}"
-    modApi "dev.architectury:architectury-forge:${architectury_version}"
-    modApi "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+    forge libs.neoforge
+    modApi libs.architectury.forge
+    modRuntimeOnly libs.cloth.forge
     common(project(path: ':morebuilding-common', configuration: 'namedElements')) {
         transitive false
     }
-    shadowCommon(project(path: ':morebuilding-common', configuration: 'transformProductionFabric')) {
+    shadowCommon(project(path: ':morebuilding-common', configuration: 'transformProductionNeoForge')) {
         transitive false
     }
 }
@@ -54,7 +76,6 @@ processResources {
     var replaceProperties = [
         architectury_version_range   : architectury_version_range_forge,
         cloth_config_version_range: cloth_config_version_range_forge,
-        minecraft_version            : minecraft_version,
         minecraft_version_range      : minecraft_version_range_forge,
         mod_description              : mod_description,
         mod_id                       : mod_id,
@@ -62,7 +83,6 @@ processResources {
         mod_name                     : mod_name,
         mod_version                  : version,
         neoforge_loader_version_range: neoforge_loader_version_range,
-        neoforge_version             : neoforge_version,
         neoforge_version_range       : neoforge_version_range,
         repo_page_url                : repo_page_url,
         update_json_url              : update_json_url
@@ -74,6 +94,19 @@ processResources {
     ]) {
         expand replaceProperties + [project: project]
     }
+}
+
+tasks.register('copyGeneratedResources', Copy) {
+    from project(':morebuilding-quilt').file('src/main/generated').absolutePath
+    into 'build/resources/main'
+}
+
+tasks.withType(Jar).configureEach {
+    dependsOn copyGeneratedResources
+}
+
+tasks.withType(Javadoc).configureEach {
+    dependsOn copyGeneratedResources
 }
 
 shadowJar {
@@ -88,10 +121,28 @@ shadowJar {
 remapJar {
     inputFile.set shadowJar.archiveFile
     dependsOn shadowJar
+    archiveClassifier = null
+}
+
+tasks.register('renameJarForPublication', Zip) {
+    dependsOn remapJar
+    from remapJar.archiveFile.map {
+        zipTree(it)
+    }
+    archiveExtension = 'jar'
+    metadataCharset = 'UTF-8'
+    destinationDirectory = base.libsDirectory
+    archiveClassifier = name
+}
+
+assemble.dependsOn renameJarForPublication
+
+jar {
+    archiveClassifier = 'dev'
 }
 
 sourcesJar {
-    def commonSources = project(':morebuilding-common').sourcesJar
+    Jar commonSources = project(':morebuilding-common').sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map {
         zipTree(it)
@@ -107,9 +158,17 @@ components.java {
 publishing {
     publications {
         register('MoreBuildingNeoForge', MavenPublication) {
-            from components.java
+            from components.java as SoftwareComponent
             groupId = maven_group
             artifactId = "${archives_base_name}-neoforge"
+            artifact(jar) {
+                classifier = 'dev'
+                extension = 'jar'
+            }
+            artifact(shadowJar) {
+                classifier = 'dev-shadow'
+                extension = 'jar'
+            }
             pom {
                 description = mod_description
                 developers {
@@ -148,4 +207,8 @@ publishing {
             url = 'https://maven.pkg.github.com/ms0503/more-building'
         }
     }
+}
+
+signing {
+    sign publishing.publications.MoreBuildingNeoForge
 }

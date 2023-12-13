@@ -1,9 +1,21 @@
 {
     "access_widener": "morebuilding.accesswidener",
+    "minecraft": {
+        "environment": "*"
+    },
     "mixin": [
         "morebuilding-quilt.mixins.json",
         "morebuilding-common.mixins.json"
     ],
+    "modmenu": {
+        "links": {
+            "modmenu.kofi": "https://ko-fi.com/ms0503",
+            "modmenu.modrinth": "https://modrinth.com/mod/more-building",
+            "modmenu.paypal": "https://paypal.me/sotomirana",
+            "modmenu.twitch": "https://twitch.tv/ms0503_",
+            "modmenu.twitter": "https://twitter.com/ms0503_"
+        }
+    },
     "quilt_loader": {
         "depends": [
             {
@@ -24,7 +36,10 @@
             }
         ],
         "entrypoints": {
-            "init": "ms.sora.mod.morebuilding.MoreBuildingQuilt"
+            "client_init": "ms.sora.mod.morebuilding.quilt.MBQuilt${'$Client'}",
+            "fabric-datagen": "ms.sora.mod.morebuilding.quilt.datagen.MBDataGen",
+            "init": "ms.sora.mod.morebuilding.quilt.MBQuilt",
+            "modmenu": "ms.sora.mod.morebuilding.quilt.MBModMenuEntry"
         },
         "group": "${maven_group}",
         "id": "${mod_id}",
@@ -43,9 +58,6 @@
             "icon": "assets/${mod_id}/icon.png",
             "license": "${mod_license}",
             "name": "${mod_name}"
-        },
-        "minecraft": {
-            "environment": "*"
         },
         "version": "${mod_version}"
     },

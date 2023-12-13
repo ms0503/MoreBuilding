@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:stonecutting",
+    "count": 1,
+    "ingredient": {
+        "item": "morebuilding:fine_sand_bricks"
+    },
+    "result": "minecraft:cut_sandstone"
+}

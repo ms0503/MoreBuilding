@@ -1,0 +1,17 @@
+{
+    "advancements.morebuilding.backpack.description": "バックパックを入手する",
+    "advancements.morebuilding.backpack.title": "さあ、出発だ！",
+    "block.morebuilding.backpack": "バックパック",
+    "block.morebuilding.coarse_bricks": "粗いレンガ",
+    "block.morebuilding.diamond_bricks": "ダイヤモンドレンガ",
+    "block.morebuilding.emerald_bricks": "エメラルドレンガ",
+    "block.morebuilding.fine_sand_bricks": "細かい砂レンガ",
+    "block.morebuilding.fine_stone_bricks": "細かい石レンガ",
+    "block.morebuilding.gold_bricks": "金レンガ",
+    "block.morebuilding.iron_bricks": "鉄レンガ",
+    "block.morebuilding.sand_bricks": "砂レンガ",
+    "container.morebuilding.backpack": "Backpack",
+    "container.morebuilding.backpack.more": "and %s more...",
+    "itemGroup.morebuilding.tab": "More Building",
+    "modmenu.descriptionTranslation.morebuilding": "This mod adds more building blocks."
+}

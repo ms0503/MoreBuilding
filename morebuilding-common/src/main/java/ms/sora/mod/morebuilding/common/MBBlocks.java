@@ -2,97 +2,111 @@ package ms.sora.mod.morebuilding.common;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-
-import java.lang.reflect.InvocationTargetException;
 import java.util.function.Supplier;
-import ms.sora.mod.morebuilding.MoreBuildingCore;
+import ms.sora.mod.morebuilding.common.block.BackpackBlock;
+import ms.sora.mod.morebuilding.common.blockentity.BackpackBlockEntity;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 
 /**
- * More Building Blocks
+ * MBBlocks is a manager class of blocks.
+ * <p>
+ * This class contains blocks and registers of them.
+ *
+ * @since 0.1.0-beta0
  */
-@SuppressWarnings({"UnstableApiUsage", "unchecked", "unused"})
-public class MBBlocks {
+@SuppressWarnings("unused")
+public final class MBBlocks {
     /**
-     * Block registry
+     * A block register
      */
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(MoreBuildingInfo.MOD_ID, RegistryKeys.BLOCK);
+    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(MBInfo.MOD_ID, RegistryKeys.BLOCK);
 
     /**
-     * Block item registry
+     * The Backpack
+     *
+     * @since 0.1.0
      */
-    public static final DeferredRegister<Item> BLOCK_ITEMS = DeferredRegister.create(MoreBuildingInfo.MOD_ID, RegistryKeys.ITEM);
+    public static final RegistrySupplier<BackpackBlock> BACKPACK = register("backpack", () ->
+        new BackpackBlock(AbstractBlock.Settings.copy(Blocks.CHEST)
+            .solid()
+            .nonOpaque()
+            .suffocates((state, world, pos) -> !(world.getBlockEntity(pos) instanceof BackpackBlockEntity))
+            .blockVision((state, world, pos) -> !(world.getBlockEntity(pos) instanceof BackpackBlockEntity))
+            .pistonBehavior(PistonBehavior.DESTROY)
+            .solidBlock((state, world, pos) -> true)
+        ), new Item.Settings().maxCount(1)
+    );
 
     /**
-     * Big Bricks
+     * The Coarse Bricks
      */
-    public static final RegistrySupplier<Block> BIG_BRICKS = register("big_bricks", Blocks.BRICKS);
+    public static final RegistrySupplier<Block> COARSE_BRICKS = register("coarse_bricks", Blocks.BRICKS);
 
     /**
-     * Diamond Bricks
+     * The Diamond Bricks
+     *
+     * @since 0.1.0-beta1
      */
     public static final RegistrySupplier<Block> DIAMOND_BRICKS = register("diamond_bricks", Blocks.DIAMOND_BLOCK);
 
     /**
-     * Emerald Bricks
+     * The Emerald Bricks
+     *
+     * @since 0.1.0-beta1
      */
     public static final RegistrySupplier<Block> EMERALD_BRICKS = register("emerald_bricks", Blocks.EMERALD_BLOCK);
 
     /**
-     * Gold Bricks
+     * The Fine Sand Bricks
+     */
+    public static final RegistrySupplier<Block> FINE_SAND_BRICKS = register("fine_sand_bricks", Blocks.SANDSTONE);
+
+    /**
+     * The Fine Stone Bricks
+     */
+    public static final RegistrySupplier<Block> FINE_STONE_BRICKS = register("fine_stone_bricks", Blocks.STONE_BRICKS);
+
+    /**
+     * The Gold Bricks
+     *
+     * @since 0.1.0-beta1
      */
     public static final RegistrySupplier<Block> GOLD_BRICKS = register("gold_bricks", Blocks.GOLD_BLOCK);
 
     /**
-     * Iron Bricks
+     * The Iron Bricks
+     *
+     * @since 0.1.0-beta1
      */
     public static final RegistrySupplier<Block> IRON_BRICKS = register("iron_bricks", Blocks.IRON_BLOCK);
 
     /**
-     * Sand Bricks
+     * The Sand Bricks
      */
     public static final RegistrySupplier<Block> SAND_BRICKS = register("sand_bricks", Blocks.SANDSTONE);
 
-    /**
-     * Small Sand Bricks
-     */
-    public static final RegistrySupplier<Block> SMALL_SAND_BRICKS = register("small_sand_bricks", Blocks.SANDSTONE);
-
-    /**
-     * Small Stone Bricks
-     */
-    public static final RegistrySupplier<Block> SMALL_STONE_BRICKS = register("small_stone_bricks", Blocks.STONE_BRICKS);
-
-    private static <T extends Block> RegistrySupplier<Block> register(String name, Supplier<T> sup, Item.Settings settings) {
-        RegistrySupplier<Block> block = BLOCKS.register(name, sup);
-        BLOCK_ITEMS.register(name, () -> new BlockItem(block.get(), settings.arch$tab(MoreBuildingCore.MORE_BUILDING_TAB)));
+    @SuppressWarnings("UnstableApiUsage")
+    private static <T extends Block> RegistrySupplier<T> register(String name, Supplier<T> sup, Item.Settings settings) {
+        RegistrySupplier<T> block = BLOCKS.register(name, sup);
+        MBItems.ITEMS.register(name, () -> new BlockItem(block.get(), settings.arch$tab(MBCore.MORE_BUILDING_TAB)));
         return block;
     }
 
-    private static <T extends Block> RegistrySupplier<Block> register(String name, Supplier<T> sup) {
+    private static <T extends Block> RegistrySupplier<T> register(String name, Supplier<T> sup) {
         return register(name, sup, new Item.Settings());
     }
 
-    private static <T extends Block> RegistrySupplier<Block> register(String name, AbstractBlock.Settings settings) {
-        return register(name, () -> {
-            try {
-                return ((Class<T>) Block.class).getDeclaredConstructor(AbstractBlock.Settings.class).newInstance(settings);
-            } catch(InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
-        });
-    }
-
     private static RegistrySupplier<Block> register(String name, Block block) {
-        return register(name, AbstractBlock.Settings.copy(block));
+        return register(name, () -> new Block(AbstractBlock.Settings.copy(block)));
     }
 
-    private static <T extends Block> RegistrySupplier<Block> register(String name) {
-        return register(name, AbstractBlock.Settings.create());
+    private static RegistrySupplier<Block> register(String name) {
+        return register(name, () -> new Block(AbstractBlock.Settings.create()));
     }
 }

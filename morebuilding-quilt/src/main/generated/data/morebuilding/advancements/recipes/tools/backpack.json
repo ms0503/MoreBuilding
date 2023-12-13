@@ -1,0 +1,72 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "has_chest": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "minecraft:chest"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_leather": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "minecraft:leather"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_planks": {
+            "conditions": {
+                "items": [
+                    {
+                        "tag": "minecraft:planks"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_string": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "minecraft:string"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_the_recipe": {
+            "conditions": {
+                "recipe": "morebuilding:backpack"
+            },
+            "trigger": "minecraft:recipe_unlocked"
+        }
+    },
+    "requirements": [
+        [
+            "has_chest",
+            "has_leather",
+            "has_planks",
+            "has_string",
+            "has_the_recipe"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "morebuilding:backpack"
+        ]
+    },
+    "sends_telemetry_event": false
+}

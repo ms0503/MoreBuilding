@@ -1,0 +1,27 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "key": {
+        "C": {
+            "item": "minecraft:chest"
+        },
+        "L": {
+            "item": "minecraft:leather"
+        },
+        "P": {
+            "tag": "minecraft:planks"
+        },
+        "S": {
+            "item": "minecraft:string"
+        }
+    },
+    "pattern": [
+        "LPL",
+        "LCL",
+        "SPS"
+    ],
+    "result": {
+        "item": "morebuilding:backpack"
+    },
+    "show_notification": true
+}

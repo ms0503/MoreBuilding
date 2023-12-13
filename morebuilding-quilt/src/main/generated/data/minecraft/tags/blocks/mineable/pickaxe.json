@@ -1,0 +1,13 @@
+{
+    "replace": false,
+    "values": [
+        "morebuilding:coarse_bricks",
+        "morebuilding:diamond_bricks",
+        "morebuilding:emerald_bricks",
+        "morebuilding:gold_bricks",
+        "morebuilding:iron_bricks",
+        "morebuilding:sand_bricks",
+        "morebuilding:fine_sand_bricks",
+        "morebuilding:fine_stone_bricks"
+    ]
+}

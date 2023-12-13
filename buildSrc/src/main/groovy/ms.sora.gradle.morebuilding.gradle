@@ -3,9 +3,10 @@ plugins {
     id 'idea'
     id 'java'
     id 'maven-publish'
+    id 'signing'
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 idea {
     module {
@@ -26,11 +27,14 @@ java {
     withSourcesJar()
 }
 
+javadoc {
+    options.charSet = 'UTF-8'
+    options.encoding = 'UTF-8'
+    exclude 'team/**'
+}
+
 afterEvaluate {
     base {
-        archivesName = archives_base_name
+        archivesName = project.name
     }
-
-    version = "${version}+${minecraft_version}"
-    group = maven_group
 }

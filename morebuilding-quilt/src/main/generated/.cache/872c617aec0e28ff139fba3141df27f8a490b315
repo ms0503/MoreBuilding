@@ -1,0 +1,14 @@
+// 1.20.1	2023-12-13T13:21:33.631226871	More Building/Tags for minecraft:block
+e460a7d32e145ad92d276d68bc4c6e294347adb0 data/minecraft/tags/blocks/guarded_by_piglins.json
+32392e4292a74f7fb22f956c8b1bee6fc2cf23b2 data/minecraft/tags/blocks/needs_stone_tool.json
+355fd24b91d3a302e42ab60c382155e1b3844e59 data/forge/tags/blocks/sandstone.json
+c25e81b478da05469c30794242fc2742216c0b8f data/minecraft/tags/blocks/needs_iron_tool.json
+eeaa5f852ae21c5ad4975fb5a386924f6e44cde5 data/minecraft/tags/blocks/stone_bricks.json
+bd26512d68358be311081544ae07a1a959f531f7 data/minecraft/tags/blocks/mineable/axe.json
+e460a7d32e145ad92d276d68bc4c6e294347adb0 data/minecraft/tags/blocks/piglin_loved.json
+355fd24b91d3a302e42ab60c382155e1b3844e59 data/c/tags/blocks/uncolored_sandstone_blocks.json
+bd26512d68358be311081544ae07a1a959f531f7 data/minecraft/tags/blocks/lava_pool_stone_cannot_replace.json
+355fd24b91d3a302e42ab60c382155e1b3844e59 data/c/tags/blocks/sandstone_blocks.json
+f4101b72a81f187cc5777552fb519cb28e6b684c data/morebuilding/tags/blocks/bricks.json
+edfebadfb63868d8a2435d8cb18b16b271ecfca1 data/minecraft/tags/blocks/mineable/pickaxe.json
+bd26512d68358be311081544ae07a1a959f531f7 data/minecraft/tags/blocks/features_cannot_replace.json

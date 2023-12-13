@@ -1,11 +1,14 @@
+import com.modrinth.minotaur.dependencies.DependencyType
+import com.modrinth.minotaur.dependencies.VersionDependency
+
 plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.modrinth.minotaur' version '2.+'
     id 'ms.sora.gradle.morebuilding'
 }
 
-base {
-    archivesName = "${archivesName}-forge"
-}
+version = "${version}+${libs.minecraft.get().version}"
+group = maven_group
 
 architectury {
     platformSetupLoomIde()
@@ -19,7 +22,24 @@ loom {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
         mixinConfig 'morebuilding-common.mixins.json'
-        mixinConfig 'morebuilding.mixins.json'
+        mixinConfig 'morebuilding-forge.mixins.json'
+    }
+
+    mods {
+        register("$mod_id") {
+            sourceSet sourceSets.main as SourceSet
+        }
+    }
+
+    runs {
+        data {
+            data()
+            programArg '--all'
+            programArgs '--mod', "$mod_id"
+            programArgs '--existing', project(':morebuilding-common').file('src/main/resources').absolutePath
+            programArgs '--output', file('src/main/generated').absolutePath
+            runDir 'build/datagen'
+        }
     }
 }
 
@@ -32,16 +52,20 @@ configurations {
 }
 
 repositories {
+    maven {
+        name = 'Su5eD'
+        url = 'https://maven.su5ed.dev/releases'
+    }
 }
 
 dependencies {
-    forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    modApi "dev.architectury:architectury-forge:${architectury_version}"
-    modApi "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
+    forge libs.forge
+    modApi libs.architectury.forge
+    modRuntimeOnly libs.cloth.forge
     common(project(path: ':morebuilding-common', configuration: 'namedElements')) {
         transitive false
     }
-    shadowCommon(project(path: ':morebuilding-common', configuration: 'transformProductionFabric')) {
+    shadowCommon(project(path: ':morebuilding-common', configuration: 'transformProductionForge')) {
         transitive false
     }
 }
@@ -70,6 +94,19 @@ processResources {
     }
 }
 
+tasks.register('copyGeneratedResources', Copy) {
+    from project(':morebuilding-quilt').file('src/main/generated').absolutePath
+    into 'build/resources/main'
+}
+
+tasks.withType(Jar).configureEach {
+    dependsOn copyGeneratedResources
+}
+
+tasks.withType(Javadoc).configureEach {
+    dependsOn copyGeneratedResources
+}
+
 shadowJar {
     exclude 'fabric.mod.json'
     exclude 'architectury.common.json'
@@ -82,10 +119,28 @@ shadowJar {
 remapJar {
     inputFile.set shadowJar.archiveFile
     dependsOn shadowJar
+    archiveClassifier = null
+}
+
+tasks.register('renameJarForPublication', Zip) {
+    dependsOn remapJar
+    from remapJar.archiveFile.map {
+        zipTree(it)
+    }
+    archiveExtension = 'jar'
+    metadataCharset = 'UTF-8'
+    destinationDirectory = base.libsDirectory
+    archiveClassifier = name
+}
+
+assemble.dependsOn renameJarForPublication
+
+jar {
+    archiveClassifier = 'dev'
 }
 
 sourcesJar {
-    def commonSources = project(':morebuilding-common').sourcesJar
+    Jar commonSources = project(':morebuilding-common').sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map {
         zipTree(it)
@@ -101,9 +156,17 @@ components.java {
 publishing {
     publications {
         register('MoreBuildingForge', MavenPublication) {
-            from components.java
+            from components.java as SoftwareComponent
             groupId = maven_group
             artifactId = "${archives_base_name}-forge"
+            artifact(jar) {
+                classifier = 'dev'
+                extension = 'jar'
+            }
+            artifact(shadowJar) {
+                classifier = 'dev-shadow'
+                extension = 'jar'
+            }
             pom {
                 description = mod_description
                 developers {
@@ -143,3 +206,26 @@ publishing {
         }
     }
 }
+
+signing {
+    sign publishing.publications.MoreBuildingForge
+}
+
+modrinth {
+    changelog = rootProject.file('CHANGELOG.md').text
+    debugMode = false
+    dependencies.addAll([
+        new VersionDependency('lhGA9TYQ', 'gyJ7kDpb', DependencyType.REQUIRED), // Architectury API (Forge)
+        new VersionDependency('9s6osm5g', 'JoLgnJ0G', DependencyType.REQUIRED)  // Cloth Config API (Forge)
+    ])
+    gameVersions.add libs.minecraft.get().version
+    loaders.add 'forge'
+    projectId = modrinth_project_id
+    syncBodyFrom = rootProject.file('README.md').text
+    token = System.getenv 'MODRINTH_TOKEN'
+    uploadFile = remapJar
+    versionName = "v${version}-LexForge"
+    versionNumber.set version as String
+    versionType = 'release'
+}
+

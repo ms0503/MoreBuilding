@@ -1,42 +1,76 @@
+import net.fabricmc.loom.task.RemapJarTask
+
 plugins {
     id 'ms.sora.gradle.morebuilding'
 }
 
-base {
-    archivesName = "${archivesName}-common"
-}
+version = "${version}+${libs.minecraft.get().version}"
+group = maven_group
 
 architectury {
-    common(enabled_platforms.split(','))
+    common(enabled_platforms.split(',')) {
+        it.platformPackage 'neoforge', 'neoforge'
+        it.platformPackage 'quilt', 'quilt'
+    }
 }
 
 loom {
     accessWidenerPath = file('src/main/resources/morebuilding.accesswidener')
 }
 
+repositories {
+}
+
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modApi "dev.architectury:architectury:${architectury_version}"
+    modApi libs.architectury
+    modApi(libs.cloth) {
+        exclude group: 'net.fabricmc.fabric-api'
+    }
 }
 
 tasks.register('expandInfo', Copy) {
     doFirst {
-        delete 'src/main/java/ms/sora/mod/morebuilding/common/MoreBuildingInfo.java'
+        delete 'src/main/java/ms/sora/mod/morebuilding/common/MBInfo.java'
     }
-    from 'MoreBuildingInfo.java'
+    from 'MBInfo.java'
     into 'src/main/java/ms/sora/mod/morebuilding/common'
-    expand mod_id: mod_id, mod_name: mod_name, mod_version: version
+    expand mod_description: mod_description, mod_id: mod_id, mod_name: mod_name, mod_version: version
 }
 
-compileJava.dependsOn(expandInfo)
-sourcesJar.dependsOn(expandInfo)
+compileJava.dependsOn expandInfo
+sourcesJar.dependsOn expandInfo
+
+tasks.register('renameJarForPublication', Zip) {
+    dependsOn remapJar as RemapJarTask
+    from remapJar.archiveFile.map {
+        zipTree(it)
+    }
+    archiveExtension = 'jar'
+    metadataCharset = 'UTF-8'
+    destinationDirectory = base.libsDirectory
+    archiveClassifier = name
+}
+
+assemble.dependsOn renameJarForPublication
+
+jar {
+    archiveClassifier = 'dev'
+}
+
+artifacts {
+    archives remapJar
+}
 
 publishing {
     publications {
         register('MoreBuildingCommon', MavenPublication) {
-            from components.java
+            from components.java as SoftwareComponent
             groupId = maven_group
-            artifactId = archives_base_name
+            artifactId = "${archives_base_name}-common"
+            artifact(jar) {
+                classifier = 'dev'
+                extension = 'jar'
+            }
             pom {
                 description = mod_description
                 developers {
@@ -75,4 +109,8 @@ publishing {
             url = 'https://maven.pkg.github.com/ms0503/more-building'
         }
     }
+}
+
+signing {
+    sign publishing.publications.MoreBuildingCommon
 }

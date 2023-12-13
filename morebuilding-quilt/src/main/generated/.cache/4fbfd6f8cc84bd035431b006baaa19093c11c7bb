@@ -1,0 +1,10 @@
+// 1.20.1	2023-12-13T13:21:33.629356348	More Building/Block Loot Tables
+7cc5d6713972bd29a8faf9d37a6b0262655c2fa0 data/morebuilding/loot_tables/blocks/coarse_bricks.json
+77a174a8c6b9cd2e4982c44f8a09997d32a849a1 data/morebuilding/loot_tables/blocks/emerald_bricks.json
+38e7176f228dc3577eb7d7762b8bd7800549e3bc data/morebuilding/loot_tables/blocks/backpack.json
+e19ee6877ecf1d80217566633d3a43abd165b764 data/morebuilding/loot_tables/blocks/fine_sand_bricks.json
+b5eeba54dbcc8d5f5606a74047e1c40f37963e28 data/morebuilding/loot_tables/blocks/fine_stone_bricks.json
+c7816c4e9cc156fe2d95f73b007b897b54778bf4 data/morebuilding/loot_tables/blocks/diamond_bricks.json
+6e87d6fdd2263889e48cec8772928d64538b9b7c data/morebuilding/loot_tables/blocks/gold_bricks.json
+b7dd655937c7eaa956ed36b578c274f53e34be74 data/morebuilding/loot_tables/blocks/sand_bricks.json
+3bd3e0c8d2fb07e6bf75b8fbc4ba4f91fdf95ffe data/morebuilding/loot_tables/blocks/iron_bricks.json

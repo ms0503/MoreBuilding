@@ -1,19 +1,49 @@
+import net.fabricmc.loom.task.RunGameTask
+
 plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'ms.sora.gradle.morebuilding'
 }
 
-base {
-    archivesName = "${archivesName}-quilt"
-}
+version = "${version}+${libs.minecraft.get().version}"
+group = maven_group
 
 architectury {
     platformSetupLoomIde()
-    loader('quilt')
+    loader('quilt') {
+        platformPackage = 'quilt'
+    }
 }
 
 loom {
     accessWidenerPath = project(':morebuilding-common').loom.accessWidenerPath
+
+    mods {
+        register("$mod_id") {
+            sourceSet sourceSets.main as SourceSet
+        }
+    }
+
+    runs {
+        data {
+            inherit server
+            name 'Data Generation'
+            vmArg '-Dfabric-api.datagen'
+            vmArg "-Dfabric-api.datagen.modid=$mod_id"
+            vmArg "-Dfabric-api.datagen.output-dir=${file('src/main/generated')}"
+            runDir 'build/datagen'
+        }
+    }
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs += [
+                'src/main/generated'
+            ]
+        }
+    }
 }
 
 configurations {
@@ -25,22 +55,34 @@ configurations {
 }
 
 repositories {
+    maven {
+        name = 'TerraformersMC'
+        url = 'https://maven.terraformersmc.com/releases'
+    }
 }
 
 dependencies {
-    modImplementation "org.quiltmc:quilt-loader:${quilt_loader_version}"
-    modApi "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilt_api_version}"
-    modApi("dev.architectury:architectury-fabric:${architectury_version}") {
+    modApi(libs.architectury.fabric) {
         exclude group: 'net.fabricmc'
         exclude group: 'net.fabricmc.fabric-api'
     }
-    modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
+    modApi(libs.modmenu) {
+        exclude group: 'net.fabricmc'
         exclude group: 'net.fabricmc.fabric-api'
+    }
+    modApi libs.quilt.loader
+    modApi libs.quilt.api
+    modRuntimeOnly(libs.cloth.fabric) {
+        exclude group: 'net.fabricmc'
+        exclude group: 'net.fabricmc.fabric-api'
+    }
+    include modApi('teamreborn:energy:3.0.0') {
+        transitive false
     }
     common(project(path: ':morebuilding-common', configuration: 'namedElements')) {
         transitive false
     }
-    shadowCommon(project(path: ':morebuilding-common', configuration: 'transformProductionFabric')) {
+    shadowCommon(project(path: ':morebuilding-common', configuration: 'transformProductionQuilt')) {
         transitive false
     }
 }
@@ -78,10 +120,28 @@ remapJar {
     injectAccessWidener = true
     inputFile.set shadowJar.archiveFile
     dependsOn shadowJar
+    archiveClassifier = null
+}
+
+tasks.register('renameJarForPublication', Zip) {
+    dependsOn remapJar
+    from remapJar.archiveFile.map {
+        zipTree(it)
+    }
+    archiveExtension = 'jar'
+    metadataCharset = 'UTF-8'
+    destinationDirectory = base.libsDirectory
+    archiveClassifier = name
+}
+
+assemble.dependsOn renameJarForPublication
+
+jar {
+    archiveClassifier = 'dev'
 }
 
 sourcesJar {
-    def commonSources = project(':morebuilding-common').sourcesJar
+    Jar commonSources = project(':morebuilding-common').sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map {
         zipTree(it)
@@ -94,12 +154,29 @@ components.java {
     }
 }
 
+tasks.register('prepareRunData', Copy) {
+    from project(':morebuilding-common').file('src/main/resources').listFiles().absolutePath
+    into 'build/resources/main'
+}
+
+tasks.named('runData', RunGameTask) {
+    dependsOn prepareRunData as Copy
+}
+
 publishing {
     publications {
         register('MoreBuildingQuilt', MavenPublication) {
-            from components.java
+            from components.java as SoftwareComponent
             groupId = maven_group
             artifactId = "${archives_base_name}-quilt"
+            artifact(jar) {
+                classifier = 'dev'
+                extension = 'jar'
+            }
+            artifact(shadowJar) {
+                classifier = 'dev-shadow'
+                extension = 'jar'
+            }
             pom {
                 description = mod_description
                 developers {
@@ -138,4 +215,8 @@ publishing {
             url = 'https://maven.pkg.github.com/ms0503/more-building'
         }
     }
+}
+
+signing {
+    sign publishing.publications.MoreBuildingQuilt
 }

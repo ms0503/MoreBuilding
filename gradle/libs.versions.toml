@@ -1,0 +1,31 @@
+[versions]
+architectury_version = '9.1.12'
+cloth_version = '11.1.106'
+fabric_api_version = '0.90.7+1.20.1'
+fabric_loader_version = '0.14.24'
+forge_version = '1.20.1-47.2.6'
+forgified_fabric_api_version = '0.90.7+1.10.2+1.20.1'
+mc_version = '1.20.1'
+modmenu_version = '7.2.2'
+neoforge_version = '1.20.1-47.1.65'
+quilt_api_version = '7.4.0+0.90.0-1.20.1'
+quilt_loader_version = '0.22.0-beta.1'
+quilt_mapping_version = '1.20.1+build.23'
+
+[libraries]
+architectury = { module = 'dev.architectury:architectury', version.ref = 'architectury_version' }
+architectury_fabric = { module = 'dev.architectury:architectury-fabric', version.ref = 'architectury_version' }
+architectury_forge = { module = 'dev.architectury:architectury-forge', version.ref = 'architectury_version' }
+cloth = { module = 'me.shedaniel.cloth:cloth-config', version.ref = 'cloth_version' }
+cloth_fabric = { module = 'me.shedaniel.cloth:cloth-config-fabric', version.ref = 'cloth_version' }
+cloth_forge = { module = 'me.shedaniel.cloth:cloth-config-forge', version.ref = 'cloth_version' }
+fabric_api = { module = 'net.fabricmc.fabric-api:fabric-api', version.ref = 'fabric_api_version' }
+fabric_loader = { module = 'net.fabricmc:fabric-loader', version.ref = 'fabric_loader_version' }
+forge = { module = 'net.minecraftforge:forge', version.ref = 'forge_version' }
+forgified_fabric_api = { module = 'dev.su5ed.sinytra.fabric-api:fabric-api', version.ref = 'forgified_fabric_api_version' }
+minecraft = { module = 'com.mojang:minecraft', version.ref = 'mc_version' }
+modmenu = { module = 'com.terraformersmc:modmenu', version.ref = 'modmenu_version' }
+neoforge = { module = 'net.neoforged:forge', version.ref = 'neoforge_version' }
+quilt_api = { module = 'org.quiltmc.quilted-fabric-api:quilted-fabric-api', version.ref = 'quilt_api_version' }
+quilt_loader = { module = 'org.quiltmc:quilt-loader', version.ref = 'quilt_loader_version' }
+quilt_mapping = { module = 'org.quiltmc:quilt-mappings', version.ref = 'quilt_mapping_version' }
