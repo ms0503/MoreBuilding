@@ -177,7 +177,7 @@ modrinth {
     syncBodyFrom = project.file('README.md').text
     token = System.getenv 'MODRINTH_TOKEN'
     uploadFile = jar
-    versionName = "v${version}-Multi"
+    versionName = "v${version}-MultiLoader"
     versionNumber.set version as String
     versionType = 'release'
 }

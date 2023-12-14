@@ -1,6 +1,6 @@
 This mod
-requires [Architectury API](https://modrinth.com/mod/architectury-api), [Cloth Config API](https://modrinth.com/mod/cloth-config) (
-in all)
+requires [Architectury API](https://modrinth.com/mod/architectury-api), [Cloth Config API](https://modrinth.com/mod/cloth-config)
+(in all)
 and [Fabric API](https://modrinth.com/mod/fabric-api) (on Fabric)
 or [Quilt Standard Library](https://modrinth.com/mod/qsl) (on QuiltMC).  
 Click [here](https://github.com/ms0503/more-building/commits/1.20.1) for changelog.
