@@ -1,6 +1,6 @@
 # More Building
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-00cc00.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-00cc00.svg)](https://github.com/ms0503/more-building/blob/HEAD/LICENSE.md)
 [![Modrinth Downloads](https://img.shields.io/modrinth/dt/L2OB4eiS?label=Modrinth+downloads&logo=modrinth)](https://modrinth.com/mod/more-building)
 ![Loaders and Versions](https://img.shields.io/badge/Fabric_%2F_Forge_%2F_NeoForge_%2F_Quilt-_1.20.1-blue)
 
